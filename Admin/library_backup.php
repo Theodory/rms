@@ -56,41 +56,81 @@ if (isset($_POST['register'])) {
 <link href="../assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-<style>
-.link {padding: 10px 15px;background: transparent;border:#bccfd8 1px solid;border-left:0px;cursor:pointer;color:#607d8b}
-.disabled {cursor:not-allowed;color: #bccfd8;}
-.current {background: #bccfd8;}
-.first{border-left:#bccfd8 1px solid;}
-.question {font-weight:bold;}
-.answer{padding-top: 10px;}
-#pagination{margin-top: 20px;padding-top: 30px;border-top: #F0F0F0 1px solid;}
-.dot {padding: 10px 15px;background: transparent;border-right: #bccfd8 1px solid;}
-#overlay {background-color: rgba(0, 0, 0, 0.6);z-index: 999;position: absolute;left: 0;top: 0;width: 100%;height: 100%;display: none;}
-#overlay div {position:absolute;left:50%;top:50%;margin-top:-32px;margin-left:-32px;}
-.page-content {padding: 20px;margin: 0 auto;}
-.pagination-setting {padding:10px; margin:5px 0px 10px;border:#bccfd8  1px solid;color:#607d8b;}
-</style>
-<script>
-function getresult(url) {//comment for css
-  $.ajax({
-    url: url,
-    type: "GET",
-    data:  {rowcount:$("#rowcount").val(),"pagination_setting":$("#pagination-setting").val()},
-    beforeSend: function(){$("#overlay").show();},
-    success: function(data){
-    $("#pagination-result").html(data);
-    setInterval(function() {$("#overlay").hide(); },500);
-    },
-    error: function() 
-    {}          
-   });
-}
-function changePagination(option) {
-  if(option!= "") {
-    getresult("getresult.php");
+<style type="text/css">
+  .navi {
+  width: 500px;
+  margin: 5px;
+  padding:2px 5px;
+  border:1px solid #eee;
   }
-}
-</script>
+
+  .show {
+  color: blue;
+  margin: 5px 0;
+  padding: 3px 5px;
+  cursor: pointer;
+  font: 15px/19px Arial,Helvetica,sans-serif;
+  }
+  .show a {
+  text-decoration: none;
+  }
+  .show:hover {
+  text-decoration: underline;
+  }
+
+
+  ul.setPaginate li.setPage{
+  padding:15px 10px;
+  font-size:14px;
+  }
+
+  ul.setPaginate{
+  margin:0px;
+  padding:0px;
+  height:100%;
+  overflow:hidden;
+  font:12px 'Tahoma';
+  list-style-type:none; 
+  }  
+
+  ul.setPaginate li.dot{padding: 3px 0;}
+
+  ul.setPaginate li{
+  float:left;
+  margin:0px;
+  padding:0px;
+  margin-left:5px;
+  }
+  ul.setPaginate li a
+  {
+  background: none repeat scroll 0 0 #ffffff;
+  border: 1px solid #cccccc;
+  color: #999999;
+  display: inline-block;
+  font: 15px/25px Arial,Helvetica,sans-serif;
+  margin: 5px 3px 0 0;
+  padding: 0 5px;
+  text-align: center;
+  text-decoration: none;
+  } 
+
+  ul.setPaginate li a:hover,
+  ul.setPaginate li a.current_page
+  {
+  background: none repeat scroll 0 0 #0d92e1;
+  border: 1px solid #000000;
+  color: #ffffff;
+  text-decoration: none;
+  }
+
+  ul.setPaginate li a{
+  color:black;
+  display:block;
+  text-decoration:none;
+  padding:5px 8px;
+  text-decoration: none;
+  }
+  </style>    
 
 </head>
 <body>
@@ -241,19 +281,22 @@ function changePagination(option) {
                 ?>
               </tbody>
             </table>
-          </div>
-            <div class="page-content">
-          <div style="border-bottom: #F0F0F0 1px solid;margin-bottom: 15px;">
-          Pagination Setting:<br> <select name="pagination-setting" onChange="changePagination(this.value);" class="pagination-setting" id="pagination-setting">
-            <option value="all-links">Display All Page Link</option>
-            <option value="prev-next">Display Prev Next Only</option>
-          </select>
-          </div>
-          
-          <div id="pagination-result">
-          <input type="hidden" name="rowcount" id="rowcount" />
-          </div>
+                      <div class="navi">
+        <?php
+        $sql = "SELECT * FROM libraries ORDER BY id ASC LIMIT $pageLimit,$setLimit";
+        $query = mysql_query($sql);
+
+        while ($rec = mysql_fetch_array($query)) {
+        ?>
+        <div class="show"><a href="<?php echo $rec["url"];?>.php" target="_blank"></a></div>
+        <?php } ?>
         </div>
+
+        <?php
+        echo displayPaginationBelow($setLimit,$page);
+        ?>
+          </div>
+
       </div>
     </div>
 </div>
@@ -333,9 +376,19 @@ function myFunction() {
   }
 }
 </script>
-<script>
-  getresult("getresult.php");
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38304687-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
 </script>
+
   <?php
     }else{
       header('location: ../index.php');
