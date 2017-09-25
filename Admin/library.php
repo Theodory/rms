@@ -32,14 +32,6 @@ if (isset($_POST['register'])) {
        }  
   }
 }
-
-        if(isset($_GET["page"])){
-        $page = (int)$_GET["page"];
-        }else
-        { $page=1; };
-
-        $setLimit = 4;
-        $pageLimit = ($page * $setLimit) - $setLimit;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,41 +48,7 @@ if (isset($_POST['register'])) {
 <link href="../assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-<style>
-.link {padding: 10px 15px;background: transparent;border:#bccfd8 1px solid;border-left:0px;cursor:pointer;color:#607d8b}
-.disabled {cursor:not-allowed;color: #bccfd8;}
-.current {background: #bccfd8;}
-.first{border-left:#bccfd8 1px solid;}
-.question {font-weight:bold;}
-.answer{padding-top: 10px;}
-#pagination{margin-top: 20px;padding-top: 30px;border-top: #F0F0F0 1px solid;}
-.dot {padding: 10px 15px;background: transparent;border-right: #bccfd8 1px solid;}
-#overlay {background-color: rgba(0, 0, 0, 0.6);z-index: 999;position: absolute;left: 0;top: 0;width: 100%;height: 100%;display: none;}
-#overlay div {position:absolute;left:50%;top:50%;margin-top:-32px;margin-left:-32px;}
-.page-content {padding: 20px;margin: 0 auto;}
-.pagination-setting {padding:10px; margin:5px 0px 10px;border:#bccfd8  1px solid;color:#607d8b;}
-</style>
-<script>
-function getresult(url) {//comment for css
-  $.ajax({
-    url: url,
-    type: "GET",
-    data:  {rowcount:$("#rowcount").val(),"pagination_setting":$("#pagination-setting").val()},
-    beforeSend: function(){$("#overlay").show();},
-    success: function(data){
-    $("#pagination-result").html(data);
-    setInterval(function() {$("#overlay").hide(); },500);
-    },
-    error: function() 
-    {}          
-   });
-}
-function changePagination(option) {
-  if(option!= "") {
-    getresult("getresult.php");
-  }
-}
-</script>
+<link rel="stylesheet" type="text/css" href="../assets/css/page.css"> 
 
 </head>
 <body>
@@ -215,11 +173,18 @@ function changePagination(option) {
 
               <tbody>
                <?php
+                $a=1;
+                  if(isset($_GET["page"])){
+              $page = (int)$_GET["page"];
+              }else
+              { $page=1; };
 
-            $result = mysql_query("select * from libraries");
-            $a = 1;
+              $setLimit = 4;
+              $pageLimit = ($page * $setLimit) - $setLimit;
+              $sql = "SELECT * FROM libraries ORDER BY id ASC LIMIT $pageLimit,$setLimit";
+              $query = mysql_query($sql);
 
-            while($fetch = mysql_fetch_array($result)){
+                  while($fetch = mysql_fetch_array($query)){
 
 
           ?>
@@ -241,19 +206,11 @@ function changePagination(option) {
                 ?>
               </tbody>
             </table>
+        <?php
+        echo displayPaginationBelow($setLimit,$page);
+        ?>
           </div>
-            <div class="page-content">
-          <div style="border-bottom: #F0F0F0 1px solid;margin-bottom: 15px;">
-          Pagination Setting:<br> <select name="pagination-setting" onChange="changePagination(this.value);" class="pagination-setting" id="pagination-setting">
-            <option value="all-links">Display All Page Link</option>
-            <option value="prev-next">Display Prev Next Only</option>
-          </select>
-          </div>
-          
-          <div id="pagination-result">
-          <input type="hidden" name="rowcount" id="rowcount" />
-          </div>
-        </div>
+
       </div>
     </div>
 </div>
@@ -333,9 +290,19 @@ function myFunction() {
   }
 }
 </script>
-<script>
-  getresult("getresult.php");
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38304687-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
 </script>
+
   <?php
     }else{
       header('location: ../index.php');

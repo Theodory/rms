@@ -1,5 +1,6 @@
 <?php
 include('../dbconfig/dbconnect.php');
+include('vpage.php');
 session_start();
 
 if(isset($_SESSION['id'])){
@@ -7,7 +8,7 @@ if(isset($_SESSION['id'])){
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<title>RMS| Library</title>
+<title>RMS| Volunteers</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
@@ -17,6 +18,7 @@ if(isset($_SESSION['id'])){
 <link href="../assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link rel="stylesheet" href="../assets/css/jquery.gritter.css" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="../assets/css/page.css">
 </head>
 <body>
 <?php include('includes/logo.php'); ?>
@@ -75,11 +77,16 @@ if(isset($_SESSION['id'])){
                if(mysql_num_rows($query) < 1){
                     echo "<p class='alert alert-error'>Ooops! No volunteers yet!</p>";
                }else{
-            $query = mysql_query("select libraries.id,libraries.sname,libraries.refub_from,libraries.refub_to,volunteers.id,volunteers.name,volunteers.pnumber,volunteers.email,volunteers.school  from libraries,volunteers where libraries.id=volunteers.library_id");
+                $a=1;
+                  if(isset($_GET["page"])){
+              $page = (int)$_GET["page"];
+              }else
+              { $page=1; };
 
-        
-            $a = 1;
-
+              $setLimit = 4;
+              $pageLimit = ($page * $setLimit) - $setLimit;
+              $sql = "SELECT libraries.id,libraries.sname,libraries.refub_from,libraries.refub_to,volunteers.id,volunteers.name,volunteers.pnumber,volunteers.email,volunteers.school FROM libraries,volunteers WHERE libraries.id=volunteers.library_id ORDER BY volunteers.library_id ASC LIMIT $pageLimit,$setLimit";
+              $query = mysql_query($sql);
             while($fetch = mysql_fetch_array($query)){
           ?>
                 <tr class="odd gradeX">
@@ -103,7 +110,9 @@ if(isset($_SESSION['id'])){
               </tbody>
 
             </table>
-
+               <?php
+        echo displayPaginationBelow($setLimit,$page);
+        ?>
           </div>
       </div>
     </div>
