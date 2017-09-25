@@ -1,11 +1,10 @@
 <?php
 include('../dbconfig/dbconnect.php');
+include("function.php");
 session_start();
 
   if(isset($_SESSION['id'])){
 
-
-  
 
 if (isset($_POST['register'])) {
   $sname = ucfirst($_POST['sname']);
@@ -33,7 +32,6 @@ if (isset($_POST['register'])) {
        }  
   }
 }
-        include_once "function.php";
 
         if(isset($_GET["page"])){
         $page = (int)$_GET["page"];
