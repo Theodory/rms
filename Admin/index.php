@@ -122,11 +122,11 @@ if(isset($_POST['submit'])){
        <div class="span6">
          
           <div class="widget-box widget-chat">
-          <div class="widget-title bg_lb"> <span class="icon"> <i class="icon-calendar"></i> </span>
+          <div class="widget-title bg_lb"> <span class="icon"> <i class="icon-camera"></i> </span>
             <h5>READ INTERNATIONAL</h5>
           </div>
           <div class="widget-content nopadding collapse in">
-            <img src="../images/read_1.png">
+            <center><img src="../images/read_1.jpg" style="height: 350px;"></center>
         </div>
       </div>
 
