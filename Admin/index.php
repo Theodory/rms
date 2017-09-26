@@ -96,9 +96,9 @@ if(isset($_POST['submit'])){
 
           ?>
                 <tr>
-                  <td class="taskDesc"><i class="icon-info-sign"></i> <?php echo $fetch['task']; ?></td>
+                  <td class="taskDesc "><i class="icon-info-sign"></i> <?php echo $fetch['task']; ?></td>
                   <td class="taskStatus"><span class="in-progress"><?php echo $fetch['date']; ?></span></td>
-                  <td class="taskOptions"><a href="#" class="tip-top" data-original-title="Update"><i class="icon-ok"></i></a> <a href="task_delete.php?id=<?php echo $fetch['id']; ?>" class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
+                  <td class="taskOptions"><a id="text" href="#" class="tip-top" data-original-title="Update"><i class="icon-ok"></i></a> <a href="task_delete.php?id=<?php echo $fetch['id']; ?>" class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
                 </tr>
                 <?php
                   }
@@ -182,6 +182,14 @@ if(isset($_POST['submit'])){
 function resetMenu() {
    document.gomenu.selector.selectedIndex = 2;
 }
+</script>
+<script type="text/javascript">
+     $('#text').on('click', function(e) {
+ 
+         $('tr').addClass("newclass"); 
+       
+    });
+
 </script>
 <?php 
   }else{
