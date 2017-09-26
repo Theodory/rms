@@ -76,24 +76,37 @@ if(isset($_POST['submit'])){
             <h5>My to do list</h5>
           </div>
           <div class="widget-content nopadding collapse in">
-               <?php
+
+              <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Start/Finish</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+          <?php
           $user = $_SESSION['id'];
-            $query = mysql_query("select * from tasks where user_id = '$user'");
+            $query = mysql_query("select * from tasks where user_id = '$user' order by id DESC");
 
               $a = 1;
 
             while($fetch = mysql_fetch_array($query)){
-//will be looped from far buy the terms
+
           ?>
-                <div id="chat-messages-inner"><p id="msg-1" class="user-linda" style="display: block;"><span class="msg-block"><img src="img/demo/av2.jpg" alt=""/><strong>Task deadline</strong> <span class="label label-important pull-right">- <?php echo $fetch['date']; ?></span><span class="msg"><?php echo $fetch['task']; ?></span>
-                <span class="pull-right">
-                <input type="checkbox" name="complete">
-                <h5><a onclick="return confirm('Are you sure?')" href="task_delete.php?id=<?php echo $fetch['id']; ?>"><b><span title="delete" class="icon-trash pull-right"></h5>
-                </b></a></span></p></div>
-            <?php
-              $a++;
-            }
-            ?>
+                <tr>
+                  <td class="taskDesc"><i class="icon-info-sign"></i> <?php echo $fetch['task']; ?></td>
+                  <td class="taskStatus"><span class="in-progress"><?php echo $fetch['date']; ?></span></td>
+                  <td class="taskOptions"><a href="#" class="tip-top" data-original-title="Update"><i class="icon-ok"></i></a> <a href="task_delete.php?id=<?php echo $fetch['id']; ?>" class="tip-top" data-original-title="Delete"><i class="icon-remove"></i></a></td>
+                </tr>
+                <?php
+                  }
+                  $a++;
+                ?>
+              </tbody>
+            </table>
+         <!-- End of task table -->
 
               <div class="chat-message well">
               <center><?php if(isset($sms)){ echo $sms;} ?></center>
@@ -104,10 +117,20 @@ if(isset($_POST['submit'])){
                 </span> </form></div>
             </div>
         </div>
+    </div>
 
        <div class="span6">
+         
+          <div class="widget-box widget-chat">
+          <div class="widget-title bg_lb"> <span class="icon"> <i class="icon-calendar"></i> </span>
+            <h5>READ INTERNATIONAL</h5>
+          </div>
+          <div class="widget-content nopadding collapse in">
+            <img src="../images/read_1.png">
+        </div>
       </div>
-    </div>
+
+      </div>
     <hr/>
     
 </div>
